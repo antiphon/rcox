@@ -1,0 +1,13 @@
+Package: rcox
+Type: Package
+Title: Simulates Cox point process, in 2D and 3D
+Version: 1.00
+Date: 2014-05-22
+Author: Tuomas Rajala
+Maintainer: Tuomas Rajala <tuomas.rajala@iki.fi>
+Description: Simulate the Cox point process in 2- or 3-dimensional cube
+    (rectangular cuboid). Implementation using thinning from dominating process.
+License: GPL
+Depends:
+    Rcpp
+LinkingTo: Rcpp
