@@ -1,5 +1,6 @@
 #test parameters
 library(rcox)
+library(rgl)
 x <- matrix(runif(30),ncol=2)
 l <- lambda(x, sigma=0.01, kernel=k<-"step")
 

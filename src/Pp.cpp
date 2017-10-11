@@ -1,4 +1,4 @@
-#include <Math.h>
+#include <Rmath.h>
 #include <stdlib.h>
 #include <vector>
 #include "Pp.h"
@@ -450,4 +450,8 @@ bool Pp::distLessThanToroidal3D(int *i, int *j, double *R) {
    return true;
 }
 
-
+double Pp::getArea() {
+  double A = 1.0;
+  for(int i = 0; i < dimension; i++) A *= window.at(i*2+1) -  window.at(i*2);
+  return A;
+}

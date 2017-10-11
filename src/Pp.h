@@ -76,6 +76,8 @@ public:
   void move_cache(int *, double, double, double);
   void move_back();
   
+  double getArea();
+  
   int Rneighbours(int i, double);
 };
 

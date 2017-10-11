@@ -11,3 +11,4 @@ License: GPL
 Depends:
     Rcpp
 LinkingTo: Rcpp
+RoxygenNote: 6.0.1
