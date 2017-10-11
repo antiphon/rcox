@@ -23,6 +23,7 @@
 
 lambda <- function(x, kernel="gauss", sigma=0.5, type = "sum", alpha = 1){
   l <- list(type="none")
+  if(is(x, "ppp")) x <- cbind(x$x, x$y)
   # if we have point locations to use for shot noise
   if(is.matrix(x)){
     # ok kernels

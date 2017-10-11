@@ -4,7 +4,7 @@
 \alias{coxintensity2matrix}
 \title{Evaluate lambda}
 \usage{
-coxintensity2matrix(x, nx = 100, ny = NULL, bbox, ...)
+coxintensity2matrix(x, nx = 100, ny = NULL, bbox, W, ...)
 }
 \description{
 Evaluate lambda

@@ -4,8 +4,20 @@
 \alias{rcox}
 \title{Simulate Cox process in 2- or 3-dimensional box}
 \usage{
-rcox(lambda, n, bbox = cbind(c(0, 1), c(0, 1), c(0, 1)), iter = 10000,
-  verb = FALSE)
+rcox(lambda, n, bbox, W, iter = 10000, verb = FALSE)
+}
+\arguments{
+\item{lambda}{object from 'lambda'-function}
+
+\item{n}{points to simulate if fixed count wanted}
+
+\item{bbox}{bounding box, column matrix giving ranges}
+
+\item{W}{owin-object rectangular, can be given instead of bbox}
+
+\item{iter}{iterations of MH algorithm if n given}
+
+\item{verb}{Print some runtime output}
 }
 \description{
 Simulate the spatial Cox point process in 2- or 3-dimensional box 

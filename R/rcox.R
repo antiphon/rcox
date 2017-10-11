@@ -2,30 +2,43 @@
 #' 
 #' Simulate the spatial Cox point process in 2- or 3-dimensional box 
 #' (rectangular cuboid). Three algorithms are available:
-#'
+#' 
+#' @param lambda object from 'lambda'-function
+#' @param n points to simulate if fixed count wanted
+#' @param bbox bounding box, column matrix giving ranges
+#' @param W owin-object rectangular, can be given instead of bbox
+#' @param iter iterations of MH algorithm if n given
+#' @param verb Print some runtime output
+#' 
 #' @import Rcpp
 #' @export
 #' @useDynLib rcox
 
 rcox <- function(lambda,
                  n,
-                 bbox=cbind(c(0,1), c(0,1), c(0,1)), 
+                 bbox,
+                 W,
                  iter = 1e4,
                  verb=FALSE) {
   
   if(!"coxintensity"%in%is(lambda)) stop("use lambda(...) to create intensity.")
   #
   d <- lambda$d
-  win <- unlist(bbox[1:d, 1:d])
+  
+  if(missing(bbox)){
+    if(!missing(W)){if(is(W,"owin")) bbox <- cbind(W$xrange, W$yrange)}
+    else stop("give bbox or W")
+  }
+  
+  win <- unlist(bbox)
   
   if(!missing(n)) {# use MH
     xyz <- rcox_MH(n, win, lambda, iter, verb)
   }
   # use thinning
   else {
-    # if sum field, maximum determined in C. 
+    # if sum field, maximum determined in C.
     if(lambda$type == 0) {
-      
     }
     else{ # for product
       #if not set
@@ -40,3 +53,12 @@ rcox <- function(lambda,
   xyz <- do.call(cbind, xyz)
   list(x=xyz, bbox=bbox, lambda=lambda)
 }
+
+#' Helper to Transform to ppp
+#' 
+#' @export
+cox2ppp <- function(x, ...){
+  spatstat::ppp(x$x[,1], x$x[,2], window = as.owin(c(x$bbox)))
+}
+
+
