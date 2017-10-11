@@ -9,3 +9,8 @@ Installation (with vignette), requires the ```devtools``` package:
 devtools::install_github("antiphon/rcox", build_vignette = TRUE)
 ```
 
+Then open the vignette:
+
+```
+vignette("Simulation_example", "rcox")
+```
