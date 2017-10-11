@@ -19,7 +19,7 @@ NumericVector evaluate_lambda_c(List snfield, NumericMatrix x) {
     }
   if(dim==3)
     for(i=0; i < n; i++){
-      v(i) = SNF.getValue(x(i,0), x(i,1), x(i,3));
+      v(i) = SNF.getValue(x(i,0), x(i,1), x(i,2));
     }
     
   return(v);

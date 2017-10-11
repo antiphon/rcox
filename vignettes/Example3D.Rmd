@@ -1,0 +1,90 @@
+---
+title: "rcox-package example in 3D"
+author: "Tuomas Rajala"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example 3D}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+\newcommand{\x}{\mathbf{x}}
+
+
+This doc gives a short example of how to simulate shot-noise and product-noise Cox patterns in 3D.
+
+See the "Example_1" vignette for basics.
+
+
+```{r, message=FALSE, warning=FALSE}
+library(rcox)
+```
+
+# Simulation in 3D
+
+Two examples:
+
+```{r, fig.width=6}
+set.seed(1) 
+x1 <- matrix( runif( 10 * 3), ncol = 3 )
+x2 <- cbind(0.5, 0.5, 0.5)
+bb3 <- cbind(0:1, 0:1, 0:1) # bounding box for later
+```
+
+We set up the models like this:
+
+```{r}
+lam1 <- lambda(x1, kernel = "gauss", sigma = 0.05, alpha = 5, type = "sum")
+lam2 <- lambda(x2, kernel = "step", sigma = 0.1, alpha = c(1, 100), type = "prod")
+```
+
+The documentation lists the options.
+## Check the 3D field
+
+One can evaluate the field at any point. Let's slice through the window with $z=0.5$ plane:
+
+```{r}
+# make a slice z=0.5
+ng <- seq(0, 1, l = 50)
+grid3 <- as.matrix( expand.grid( ng, ng , 0.5) )
+field1 <- coxintensity2matrix(lam1, bbox = bb3, at = grid3)
+field2 <- coxintensity2matrix(lam2, bbox = bb3, nx = 128, at = grid3)
+```
+
+```{r, fig.width=6}
+par(mfrow=c(1,2))
+plot3 <- function(f) image(matrix(f, ncol = length(ng)), x=ng, y=ng, asp=1) 
+plot3(field1)
+plot3(field2)
+```
+
+Red means low intensity (not preferred), white means high intensity (preferred). 
+
+## Simulating
+
+The simulation uses either a thinning approach (free point count) or Metropolis-Hastings (fixed point count). The calls:
+
+```{r}
+s1 <- rcox(lambda = lam1, bbox = bb3)
+s2 <- rcox(lambda = lam2, bbox = bb3, n = 100)
+# turn to ppp-objects
+y1 <- cox2ppp(s1)
+y2 <- cox2ppp(s2)
+```
+
+```{r, fig.width=6}
+par(mfrow=c(1,2), mar=c(1,1,1,1))
+plot(y1)
+plot(y2)
+```
+
+There we have it.
+
+*EOF*
+
+
+
+
+
+

@@ -58,7 +58,10 @@ rcox <- function(lambda,
 #' 
 #' @export
 cox2ppp <- function(x, ...){
-  spatstat::ppp(x$x[,1], x$x[,2], window = as.owin(c(x$bbox)))
+  if(ncol(x$x) == 2)
+    spatstat::ppp(x$x[,1], x$x[,2], window = spatstat::as.owin(c(x$bbox)))
+  else if(ncol(x$x) == 3)
+    spatstat::pp3(x$x[,1], x$x[,2], x$x[,3], spatstat::as.box3(c(x$bbox)))
 }
 
 

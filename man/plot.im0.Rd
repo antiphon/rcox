@@ -2,10 +2,10 @@
 % Please edit documentation in R/evaluate-lambda.R
 \name{plot.im0}
 \alias{plot.im0}
-\title{Simple Plot Method}
+\title{Simple Plot Method for Grid Field}
 \usage{
 \method{plot}{im0}(x, ..., scale = identity)
 }
 \description{
-Simple Plot Method
+Simple Plot Method for Grid Field
 }

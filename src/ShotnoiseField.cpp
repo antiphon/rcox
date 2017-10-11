@@ -25,7 +25,7 @@ ShotnoiseField::ShotnoiseField(SEXP snfield) {
   if(kerni==1) { // box
     kernel = &ShotnoiseField::kernel_step;
     if(dim==2) norm /= (PI * sigma * sigma); // sigma = radius of disc
-    else norm /= 4.0/3.0 * PI * pow(sigma, 3);
+    else norm /= 0.752 * PI * pow(sigma, 3);
     sigma *=sigma; // to work with r^2 inputs
   }
   else{
@@ -115,7 +115,8 @@ double ShotnoiseField::getMax(){
     double d;
     maximum = 0;
     for(int i=0; i < n; i++) {
-      d = getValue(loc(i,0), loc(i,1));
+      if(dim == 2) d = getValue(loc(i,0), loc(i,1));
+      else d = getValue(loc(i,0), loc(i,1), loc(i,2));
       if(d > maximum) maximum = d;
     }
   }
@@ -124,7 +125,8 @@ double ShotnoiseField::getMax(){
       double d;
       maximum = 0;
       for(int i=0; i < n; i++) {
-        d = getValue(loc(i,0), loc(i,1));
+        if(dim == 2) d = getValue(loc(i,0), loc(i,1));
+        else d = getValue(loc(i,0), loc(i,1), loc(i,2));
         if(d > maximum) maximum = d;
       }
     }

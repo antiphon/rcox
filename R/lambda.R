@@ -53,8 +53,9 @@ lambda <- function(x, kernel="gauss", sigma=0.5, type = "sum", alpha = 1){
 #' @export
 print.coxintensity <- function(x, ...){
   cat("Intensity object for simulating Cox-process.\n")
+  cat("Dimension:", x$d, "\n")
   cat("Type:", c("sum", "product")[1+x$type], "\n")
   cat("Kernel:", c("gaussian", "step")[x$kernel + 1], "\n")
-  cat("alpha:", x$alpha, "\n")
+  cat("alpha:", paste(x$alpha, collapse = ", "), "\n")
   cat("sigma:", x$sigma, "\n")
 }
