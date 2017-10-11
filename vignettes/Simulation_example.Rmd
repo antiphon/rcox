@@ -50,9 +50,9 @@ This is called *shot-noise*-field. Some details of this model:
 \[
 F(u;\x) = e^{\alpha_1}\prod_{x\in \x}[1 + \alpha_2 k_\sigma(u-x)/k_\sigma(0)]
 \]
-where $\alpha_1$ again adjusts the intensity and $\alpha_2\in[-1,\infty)$ is an interaction parameter. This is called *product*-shot-noise, following Jalilian et al. 2015. Some details:
+where $\alpha_1$ again adjusts the intensity and $\alpha_2\in[-1,\infty)$ is an interaction parameter. This is called *product*-shot-noise, following Jalilian et al. 2015. Some details when $\x$ is from $Poisson(\lambda_x)$:
     * $\lambda_y = \exp\left[\alpha + \beta\lambda_x/k_\sigma(0)\right]$
-    * $g_y(r) = \exp\left[\lambda_x\alpha_2^2 (k_\sigma*k_\sigma)(r)/k_\sigma(0)^2\right]$
+    *  $g_y(r) = \exp\left[\lambda_x\alpha_2^2 (k_\sigma*k_\sigma)(r)/k_\sigma(0)^2\right]$
 
 
 
