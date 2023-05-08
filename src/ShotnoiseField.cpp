@@ -4,6 +4,11 @@
 #include <vector>
 #include "ShotnoiseField.h"
 using namespace Rcpp;
+
+#ifndef PI
+#define PI 3.141593
+#endif
+
 /********************************************************************************************/
   ShotnoiseField::~ShotnoiseField()
 {

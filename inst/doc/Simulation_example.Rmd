@@ -1,0 +1,119 @@
+---
+title: "Using rcox-package"
+author: "Tuomas Rajala"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Example 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+\newcommand{\x}{\mathbf{x}}
+
+
+This doc gives a short example of how to simulate shot-noise and product-noise Cox patterns.
+
+
+We will use ```spatstat``` to simulate the generator pattern and for some other tools, so load it as well.
+```{r, message=FALSE, warning=FALSE}
+library(rcox)
+library(spatstat)
+```
+
+# Simulation
+
+The first step is to generate the generator pattern. Let's create two of them for two different outcomes:
+
+```{r, fig.width=6}
+set.seed(1) 
+x1 <- runifpoint(50)
+x2 <- rMaternII(120, 0.08)
+generators <- listof(a=x1, b=x2)
+plot(generators)
+```
+
+
+## The basic idea
+Given a generator pattern $\x$, sample a pattern $\mathbf{y}$ from $Poisson( F(.;\x))$, where the intensity $F$ is given by one of the two ways:
+
+1. ```sum```-type: For $u\in W$ where $W$ is the window,
+\[
+F(u; \x) = \alpha \sum_{x\in\x} k_\sigma(u-x)
+\]
+where $\alpha>0$ adjusts for intensity and $k_\sigma$ is a kernel (prob. density in 2D) with parameter $\sigma$.
+This is called *shot-noise*-field. Some details of this model:
+    * $\lambda_y=\lambda_x\alpha$
+    * $g_y(r) = (k_\sigma*g_x)(r) + (k_\sigma*k_\sigma)(r)/\lambda$ ($*$ means convolution)
+
+2. ```product```-type: For $u\in W$
+\[
+F(u;\x) = e^{\alpha_1}\prod_{x\in \x}[1 + \alpha_2 k_\sigma(u-x)/k_\sigma(0)]
+\]
+where $\alpha_1$ again adjusts the intensity and $\alpha_2\in[-1,\infty)$ is an interaction parameter. This is called *product*-shot-noise, following Jalilian et al. 2015. Some details when $\x$ is from $Poisson(\lambda_x)$:
+    * $\lambda_y = \exp\left[\alpha + \beta\lambda_x/k_\sigma(0)\right]$
+    *  $g_y(r) = \exp\left[\lambda_x\alpha_2^2 (k_\sigma*k_\sigma)(r)/k_\sigma(0)^2\right]$
+
+
+
+## Setting up the model
+
+We set up the models like this:
+
+```{r}
+lam1 <- lambda(x1, kernel = "gauss", sigma = 0.05, alpha = 3, type = "sum")
+lam2 <- lambda(x2, kernel = "step", sigma = 0.1, alpha = c(log(100), -0.5), type = "prod")
+```
+
+The documentation lists the options.
+
+## Checking the field
+
+We can "evaluate" the $F$ on a grid to see how the surface looks like. 
+
+```{r}
+field1 <- coxintensity2matrix(lam1, W = square(1))
+field2 <- coxintensity2matrix(lam2, bbox = cbind(0:1, 0:1), nx = 128)
+```
+
+Note how the bounding box can be given in two ways. 
+
+```{r, fig.width=6}
+par(mfrow=c(1,2), mar=c(1,1,1,1))
+plot(field1, axes =F)
+points(x1)
+plot(field2, axes =F, scale=log)
+points(x2)
+```
+
+Red means low intensity (not preferred), white means high intensity (preferred).
+
+## Simulating
+
+The simulation uses either a thinning approach (free point count) or Metropolis-Hastings (fixed point count). The calls:
+
+```{r}
+s1 <- rcox(lambda = lam1, bbox = cbind(0:1, 0:1))
+s2 <- rcox(lambda = lam2, n = 100, bbox = cbind(0:1, 0:1), iter = 1e4, verb=T)
+# turn to ppp-objects
+y1 <- cox2ppp(s1)
+y2 <- cox2ppp(s2)
+```
+
+```{r, fig.width=6}
+par(mfrow=c(1,2), mar=c(1,1,1,1))
+plot(y1)
+points(x1, pch=3, col = 2)
+plot(y2)
+points(x2, pch=3, col = 2)
+```
+
+There we have it.
+
+*EOF*
+
+
+
+
+
+

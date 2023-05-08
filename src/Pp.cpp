@@ -1,3 +1,4 @@
+#include <R.h>
 #include <Rmath.h>
 #include <stdlib.h>
 #include <vector>
@@ -121,7 +122,7 @@ void Pp::remove_blockmembership(int *i){
       blockmembers.at(k).erase( blockmembers.at(k).begin()+j );
 //      printf(" (ok)\n");
     }
-    else{ printf("** %i not in right block ?\n", *i);}
+    else{ Rprintf("** %i not in right block ?\n", *i);}
   }
 }
 /********************************************************************************************/

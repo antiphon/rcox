@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // evaluate_lambda_c
 NumericVector evaluate_lambda_c(List snfield, NumericMatrix x);
 RcppExport SEXP _rcox_evaluate_lambda_c(SEXP snfieldSEXP, SEXP xSEXP) {

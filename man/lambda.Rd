@@ -31,5 +31,6 @@ v(u) = exp(alpha[1]) * prod [ 1 + alpha[2]*k(u-x)/k(0) ]
 
 following Jalilian et al. 2015. The kernels are normalised densities in the dimension of x.
 
-This function merely creates an field object. Use "coxintensity2matrix" to evaluate it at arbitrary locations, or "rcox" to simulate uniform/poisson process on it.
+This function merely creates an field object. Use "coxintensity2matrix" to evaluate it at 
+arbitrary locations, or "rcox" to simulate uniform/poisson process on it.
 }
