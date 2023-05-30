@@ -18,7 +18,7 @@ ShotnoiseField::ShotnoiseField(SEXP snfield) {
   List field(snfield);
   loc = as<NumericMatrix>(field["x"]);
   n = loc.nrow();
-  dim = loc.ncol();
+  dim = loc.ncol() - 1; // last dim = mark
   sigma = as<double>(field["sigma"]);
   alpha = as<NumericVector>(field["alpha"]);
   type = as<int>(field["type"]);
@@ -60,7 +60,7 @@ double ShotnoiseField::getValueSum(double x, double y){
   int i;
   double v=0;
   for(i=0; i < n; i++){
-    v+= (this->*kernel)(dist(&i, x, y));
+    v+= getMark(&i) *(this->*kernel)(dist(&i, x, y));
   }
   return alpha(0) * v * norm;
 }
@@ -68,7 +68,7 @@ double ShotnoiseField::getValueSum3(double x, double y, double z){
   int i;
   double v=0;
   for(i=0; i < n; i++){
-    v+= (this->*kernel)(dist(&i, x, y, z));
+    v+= getMark(&i) *(this->*kernel)(dist(&i, x, y, z));
   }
   return alpha(0) * v * norm;
 }
@@ -77,7 +77,7 @@ double ShotnoiseField::getValueProd(double x, double y){
   int i;
   double v=1;
   for(i=0; i < n; i++){
-    v*= 1.0 + alpha(1) * (this->*kernel)(dist(&i, x, y));
+    v*= 1.0 + alpha(1) * getMark(&i) * (this->*kernel)(dist(&i, x, y));
   }
   return v * exp(alpha(0));
 }
@@ -85,12 +85,16 @@ double ShotnoiseField::getValueProd3(double x, double y, double z){
   int i;
   double v=1;
   for(i=0; i < n; i++){
-    v*= 1.0 + alpha(1) *  (this->*kernel)(dist(&i, x, y, z));
+    v*= 1.0 + getMark(&i) * alpha(1) *  (this->*kernel)(dist(&i, x, y, z));
   }
   return v * exp(alpha(0));
 }
 
   
+double ShotnoiseField::getMark(int *i){
+  return loc(*i, dim);
+}  
+
 // Note :: all distances are squared!
 
 double ShotnoiseField::dist(int *i, double x, double y){
@@ -120,8 +124,8 @@ double ShotnoiseField::getMax(){
     double d;
     maximum = 0;
     for(int i=0; i < n; i++) {
-      if(dim == 2) d = getValue(loc(i,0), loc(i,1));
-      else d = getValue(loc(i,0), loc(i,1), loc(i,2));
+      if(dim == 2) d = getMark(&i) * getValue(loc(i,0), loc(i,1));
+      else d = getMark(&i) * getValue(loc(i,0), loc(i,1), loc(i,2));
       if(d > maximum) maximum = d;
     }
   }
@@ -130,8 +134,8 @@ double ShotnoiseField::getMax(){
       double d;
       maximum = 0;
       for(int i=0; i < n; i++) {
-        if(dim == 2) d = getValue(loc(i,0), loc(i,1));
-        else d = getValue(loc(i,0), loc(i,1), loc(i,2));
+        if(dim == 2) d = getMark(&i) * getValue(loc(i,0), loc(i,1));
+        else d = getMark(&i) * getValue(loc(i,0), loc(i,1), loc(i,2));
         if(d > maximum) maximum = d;
       }
     }

@@ -4,7 +4,20 @@
 \alias{plot.im0}
 \title{Simple Plot Method for Grid Field}
 \usage{
-\method{plot}{im0}(x, ..., scale = identity)
+\method{plot}{im0}(x, ..., scale = identity, points.cex = 0, points.pch = 19, points.col = 1)
+}
+\arguments{
+\item{x}{result object of coxintensity2matrix()}
+
+\item{...}{passed on to image()}
+
+\item{scale}{scaling function applied to values. Default: identity}
+
+\item{points.cex}{if >0, add locations}
+
+\item{points.pch}{pch fo points}
+
+\item{points.col}{col of points}
 }
 \description{
 Simple Plot Method for Grid Field

@@ -37,6 +37,7 @@ public:
   double kernel_gauss(double r);
   double kernel_step(double r);
   double getMax();
+  double getMark(int*);
 };
 
 #endif  

@@ -4,7 +4,14 @@
 \alias{lambda}
 \title{intensity object suitable for use in Cox simulation}
 \usage{
-lambda(x, kernel = "gauss", sigma = 0.5, type = "sum", alpha = 1)
+lambda(
+  x,
+  kernel = "gauss",
+  sigma = 0.5,
+  type = "sum",
+  alpha = 1,
+  weights = NULL
+)
 }
 \arguments{
 \item{x}{matrix of coordinates}
@@ -16,6 +23,8 @@ lambda(x, kernel = "gauss", sigma = 0.5, type = "sum", alpha = 1)
 \item{type}{"sum" or "product", see details}
 
 \item{alpha}{additional scaling parameter}
+
+\item{weights}{If a vector of length nrow(x), weight the sum/prod with these weights}
 }
 \description{
 intensity object suitable for use in Cox simulation
